@@ -1,35 +1,19 @@
-﻿using Npgsql;
+﻿using bibliotecabackend.Data;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder =
+    WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
+// Habilita o uso de Controllers.
+builder.Services.AddControllers();
 
+// Registra a classe de conexão para que o ASP.NET Core
+// possa fornecê-la ao ConexaoController.
+builder.Services.AddSingleton<ConexaoBanco>();
 
-app.MapGet("/teste-conexao", async () =>
-{
-    try
-    {
-        var connectionString = builder.Configuration
-            .GetConnectionString("DefaultConnection");
+WebApplication app = builder.Build();
 
-        await using var conexao =
-            new NpgsqlConnection(connectionString);
+// Disponibiliza as rotas declaradas nos Controllers.
+app.MapControllers();
 
-        await conexao.OpenAsync();
-
-        return Results.Ok(new
-        {
-            mensagem = "Conexão com o banco realizada com sucesso!",
-            banco = "biblioteca",
-            status = "Conectado"
-        });
-    }
-    catch (Exception ex)
-    {
-        return Results.Problem(
-            "Não foi possível conectar ao banco: " + ex.Message
-        );
-    }
-});
-
+// Inicia a aplicação.
 app.Run();
