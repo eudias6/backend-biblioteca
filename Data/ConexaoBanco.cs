@@ -4,7 +4,7 @@ using Npgsql;
 
 // Define que a classe pertence ao namespace LojaApi.Data.
 // O namespace ajuda a organizar as classes da aplicação.
-namespace LojaApi.Data;
+namespace bibliotecabackend.Data;
 
 // Declara a classe pública responsável pela conexão com o banco.
 //
